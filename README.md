@@ -1,8 +1,4 @@
-Oto profesjonalny, kompletny plik **`README.md`** gotowy do skopiowania i wklejenia bezpośrednio do Twojego repozytorium na GitHubie.
 
----
-
-```markdown
 # ✈️ Dariusz Fly Glider Flasher
 
 [![ESP32-C3](https://img.shields.io/badge/Hardware-ESP32--C3%20SuperMini-brightgreen)](https://www.espressif.com/)
