@@ -1,3 +1,8 @@
+Oto profesjonalny, kompletny plik **`README.md`** gotowy do skopiowania i wklejenia bezpośrednio do Twojego repozytorium na GitHubie.
+
+---
+
+```markdown
 # ✈️ Dariusz Fly Glider Flasher
 
 [![ESP32-C3](https://img.shields.io/badge/Hardware-ESP32--C3%20SuperMini-brightgreen)](https://www.espressif.com/)
@@ -72,39 +77,52 @@
                    | Stroboskop LED Szybowca |
                    +-------------------------+
 
-Komponent / Funkcja,Pin GPIO ESP32-C3,Opis / Uwagi
-Wyjście MOSFET Stroboskopu,GPIO 1,Sterowanie bramką N-MOSFET (Sygnał HIGH = WŁ)
-Dioda LED Statusu (Board),GPIO 8,Wbudowana dioda LED (Sygnał LOW = WŁ)
-FLARM UART RX,GPIO 20,Odbiór danych NMEA z portu szeregowego
-FLARM UART TX,GPIO 21,Nadawanie (opcjonalne)
-Zasilanie Układu,VCC / GND,5V DC (zintegrowany stabilizator LDO)
+```
 
+---
 
-🔄 Sekwencja Inicjalizacji (Booting)
+## 🔌 Specyfikacja Techniczna i Pinout
+
+| Komponent / Funkcja | Pin GPIO ESP32-C3 | Opis / Uwagi |
+| --- | --- | --- |
+| **Wyjście MOSFET Stroboskopu** | `GPIO 1` | Sterowanie bramką N-MOSFET (Sygnał HIGH = WŁ) |
+| **Dioda LED Statusu (Board)** | `GPIO 8` | Wbudowana dioda LED (Sygnał LOW = WŁ) |
+| **FLARM UART RX** | `GPIO 20` | Odbiór danych NMEA z portu szeregowego |
+| **FLARM UART TX** | `GPIO 21` | Nadawanie (opcjonalne) |
+| **Zasilanie Układu** | `VCC / GND` | 5V DC (zintegrowany stabilizator LDO) |
+
+---
+
+## 🔄 Sekwencja Inicjalizacji (Booting)
+
 Sterownik realizuje przewidywalny, sekwencyjny proces uruchamiania:
 
-Sprzętowy Test LED: Wykonanie 4 twardych błysków stroboskopu w pierwszej milisekundzie po podłączeniu zasilania.
+1. **Sprzętowy Test LED:** Wykonanie **4 twardych błysków** stroboskopu w pierwszej milisekundzie po podłączeniu zasilania.
+2. **Odczyt Pamięci Flash (NVM):** Wczytanie zapisanych preferencji (SSID, Hasło, Baud rate, ID Trackera).
+3. **Dedykowane Skanowanie BLE (15 sekund):** Zapewnienie pełnej mocy radia dla NimBLE (Wi-Fi wyłączone), przeszukanie eteru i wygenerowanie listy urządzeń.
+4. **Zestawienie Połączenia:** Automatyczne połączenie ze skonsolidowanym trackerem OGN.
+5. **Aktywacja Wi-Fi i WWW:** Uruchomienie Access Pointa oraz panelu konfiguracyjnego `http://192.168.4.1`.
 
-Odczyt Pamięci Flash (NVM): Wczytanie zapisanych preferencji (SSID, Hasło, Baud rate, ID Trackera).
+---
 
-Dedykowane Skanowanie BLE (15 sekund): Zapewnienie pełnej mocy radia dla NimBLE (Wi-Fi wyłączone), przeszukanie eteru i wygenerowanie listy urządzeń.
+## 📁 Struktura Projektu i Partycje
 
-Zestawienie Połączenia: Automatyczne połączenie ze skonsolidowanym trackerem OGN.
+Projekt przygotowany jest dla środowiska **PlatformIO**:
 
-Aktywacja Wi-Fi i WWW: Uruchomienie Access Pointa oraz panelu konfiguracyjnego http://192.168.4.1.
-
-📁 Struktura Projektu i Partycje
-Projekt przygotowany jest dla środowiska PlatformIO:
-
+```text
 Dariusz-Fly-Glider-Flasher/
  ├── platformio.ini         # Konfiguracja środowiska i zależności
  ├── custom_ota.csv         # Zoptymalizowana tabela partycji (Dual OTA)
  └── src/
       └── main.cpp          # Główny kod źródłowy w języku C++
 
-Schemat Partycji (custom_ota.csv)
+```
+
+### Schemat Partycji (`custom_ota.csv`)
+
 Zastosowano zoptymalizowany podział pamięci Flash (4 MB) z dedykowanymi slotami na aktualizacje bezprzewodowe OTA oraz rozbudowane biblioteki radiowe:
 
+```csv
 # Name,   Type, SubType, Offset,  Size, Flags
 nvs,      data, nvs,     0x9000,  0x5000,
 otadata,  data, ota,     0xe000,  0x2000,
@@ -113,22 +131,29 @@ app1,     app,  ota_1,   0x1F0000,0x1E0000,
 spiffs,   data, spiffs,  0x3D0000,0x20000,
 coredump, data, coredump,0x3F0000,0x10000,
 
-🛠️ Instrukcja Kompilacji (PlatformIO)
-Wymagania
-Visual Studio Code z zainstalowaną wtyczką PlatformIO IDE.
+```
 
-Zainstalowany sterownik USB-UART dla ESP32-C3.
+---
 
-Krok po kroku
-Sklonuj repozytorium:
+## 🛠️ Instrukcja Kompilacji (PlatformIO)
 
-Bash
+### Wymagania
+
+1. [Visual Studio Code](https://code.visualstudio.com/) z zainstalowaną wtyczką **PlatformIO IDE**.
+2. Zainstalowany sterownik USB-UART dla ESP32-C3.
+
+### Krok po kroku
+
+1. Sklonuj repozytorium:
+```bash
 git clone [https://github.com/twoj-login/Dariusz-Fly-Glider-Flasher.git](https://github.com/twoj-login/Dariusz-Fly-Glider-Flasher.git)
-Otwórz folder projektu w VS Code.
 
-Zawartość pliku platformio.ini:
+```
 
-Ini, TOML
+
+2. Otwórz folder projektu w **VS Code**.
+3. Zawartość pliku `platformio.ini`:
+```ini
 [env:esp32-c3-devkitm-1]
 platform = espressif32
 board = esp32-c3-devkitm-1
@@ -139,40 +164,51 @@ board_build.partitions = custom_ota.csv
 
 lib_deps =
     h2zero/NimBLE-Arduino @ ^2.0.0
-Kliknij ikonę Build (✓) lub użyj skrótu Ctrl+Alt+B.
 
-Podłącz płytkę ESP32-C3 SuperMini i kliknij Upload (➔).
+```
 
-🌐 Panel WWW i Konfiguracja
-Podłącz się do sieci Wi-Fi wygenerowanej przez sterownik i otwórz przeglądarkę pod adresem http://192.168.4.1.
 
-Domyślny SSID: FLARM_Strobe_XXX (losowy przyrostek)
+4. Kliknij ikonę **Build** (✓) lub użyj skrótu `Ctrl+Alt+B`.
+5. Podłącz płytkę ESP32-C3 SuperMini i kliknij **Upload** (➔).
 
-Domyślne Hasło: szybowiec
+---
 
-Dostępne Opcje w Panelu:
-Ochrona Termiczna: Ustawianie górnego limitu wyłączenia (60–80°C) oraz dolnego limitu ponownego załączenia (50–70°C).
+## 🌐 Panel WWW i Konfiguracja
 
-Sieć Wi-Fi: Zmiana nazwy SSID, hasła oraz czasowego wyłącznika AP (5 min, 10 min, praca ciągła).
+Podłącz się do sieci Wi-Fi wygenerowanej przez sterownik i otwórz przeglądarkę pod adresem `http://192.168.4.1`.
 
-Port Szeregowy: Wybór prędkości UART (4800, 19200, 38400, 115200 baud).
+* **Domyślny SSID:** `FLARM_Strobe_XXX` (losowy przyrostek)
+* **Domyślne Hasło:** `szybowiec`
 
-OGN Tracker BLE: Wybór urządzenia z listy rozwijanej znalezionych w eterze lub ręczne wpisanie adresu MAC/Nazwy.
+### Dostępne Opcje w Panelu:
 
-Ustawienia Błysków: Wybór liczby błysków w paczce (2–4), zmiana interwału błysków prewencyjnych (5–30 s / wyłączone) oraz wyłącznik błysków na postoju.
+* **Ochrona Termiczna:** Ustawianie górnego limitu wyłączenia (60–80°C) oraz dolnego limitu ponownego załączenia (50–70°C).
+* **Sieć Wi-Fi:** Zmiana nazwy SSID, hasła oraz czasowego wyłącznika AP (5 min, 10 min, praca ciągła).
+* **Port Szeregowy:** Wybór prędkości UART (`4800`, `19200`, `38400`, `115200` baud).
+* **OGN Tracker BLE:** Wybór urządzenia z listy rozwijanej znalezionych w eterze lub ręczne wpisanie adresu MAC/Nazwy.
+* **Ustawienia Błysków:** Wybór liczby błysków w paczce (2–4), zmiana interwału błysków prewencyjnych (5–30 s / wyłączone) oraz wyłącznik błysków na postoju.
+* **Podgląd NMEA Live:** Odbiór i wyświetlanie ramek $PFLAU / $PFLAA w czasie rzeczywistym.
+* **Aktualizacja OTA:** Przejście do podstrony `/update` pozwalającej na wgranie nowej kompilacji oprogramowania.
 
-Podgląd NMEA Live: Odbiór i wyświetlanie ramek $PFLAU / $PFLAA w czasie rzeczywistym.
+---
 
-Aktualizacja OTA: Przejście do podstrony /update pozwalającej na wgranie nowej kompilacji oprogramowania.
+## 🌡️ Bezpieczeństwo i Ochrona Termiczna
 
-🌡️ Bezpieczeństwo i Ochrona Termiczna
 Ze względu na ograniczoną przestrzeń w panelu awioniki i pracę przy wysokich temperaturach w okresie letnim, sterownik wyposażono w aktywny monitoring rdzenia ESP32:
 
-Stan Przekroczenia (temp > tempUpperLimit): Wyłączenie modułów Wi-Fi i Bluetooth, odłączenie połączenia BLE, przejście w tryb czysto sprzętowej obsługi portu UART.
+* **Stan Przekroczenia (`temp > tempUpperLimit`):** Wyłączenie modułów Wi-Fi i Bluetooth, odłączenie połączenia BLE, przejście w tryb czysto sprzętowej obsługi portu UART.
+* **Stan Schłodzenia (`temp <= tempLowerLimit`):** Automatyczne przywrócenie pracy modułów bezprzewodowych oraz wznowienie połączenia BLE.
 
-Stan Schłodzenia (temp <= tempLowerLimit): Automatyczne przywrócenie pracy modułów bezprzewodowych oraz wznowienie połączenia BLE.
+---
 
-📜 Licencja
-Projekt udostępniany jest na licencji MIT. Szczegółowe informacje znajdują się w pliku LICENSE.
+## 📜 Licencja
 
-Projekt stworzony z myślą o zwiększeniu bezpieczeństwa w lotnictwie grawitacyjnym.
+Projekt udostępniany jest na licencji **MIT**. Szczegółowe informacje znajdują się w pliku `LICENSE`.
+
+---
+
+*Projekt stworzony z myślą o zwiększeniu bezpieczeństwa w lotnictwie grawitacyjnym.*
+
+```
+
+```
